@@ -1676,10 +1676,9 @@ public class Camera extends BaseCamera implements View.OnClickListener,
         mRecordingTimeView.setText(String.format("%d:%02d", timerSeconds / 60, timerSeconds % 60));
         timerSeconds--;
         if (timerSeconds < 0) {
-            mTimerMode = false;
             autoFocus();
             mFocusState = FOCUSING_SNAP_ON_FINISH;
-            mRecordingTimeView.setVisibility(View.GONE);
+            doFocus(true);
         } else {
             Message timerMsg = Message.obtain();
             timerMsg.arg1 = timerSeconds;
