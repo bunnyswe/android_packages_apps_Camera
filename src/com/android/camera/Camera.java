@@ -667,6 +667,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
             implements android.hardware.Camera.AutoFocusCallback {
         public void onAutoFocus(
                 boolean focused, android.hardware.Camera camera) {
+            boolean mFocusBeepMute = prefs.getBoolean("focus_beep_mute", false);
             mFocusCallbackTime = System.currentTimeMillis();
             mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
             Log.e(TAG, "<PROFILE> mAutoFocusTime = " + mAutoFocusTime + "ms");
@@ -684,7 +685,7 @@ public class Camera extends BaseCamera implements View.OnClickListener,
                 // User is half-pressing the focus key. Play the focus tone.
                 // Do not take the picture now.
                 ToneGenerator tg = mFocusToneGenerator;
-                if (tg != null) {
+                if (tg != null && !mFocusBeepMute) {
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP2);
                 }
                 if (focused) {

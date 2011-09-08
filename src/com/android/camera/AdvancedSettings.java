@@ -32,6 +32,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
     private static final String KEY_VOL_ZOOM = "vol_zoom_enabled";
     private static final String KEY_LONG_FOCUS = "long_focus_enabled";
     private static final String KEY_PRE_FOCUS = "pre_focus_enabled";
+    private static final String KEY_FOCUS_BEEP = "focus_beep_mute";
 
     CheckBoxPreference volUpShutter = null;
     CheckBoxPreference volDownShutter = null;
@@ -39,6 +40,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
     CheckBoxPreference volZoom = null;
     CheckBoxPreference longFocus = null;
     CheckBoxPreference preFocus = null;
+    CheckBoxPreference focusBeep = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
         volZoom = (CheckBoxPreference) preferenceScreen.findPreference(KEY_VOL_ZOOM);
         longFocus = (CheckBoxPreference) preferenceScreen.findPreference(KEY_LONG_FOCUS);
         preFocus = (CheckBoxPreference) preferenceScreen.findPreference(KEY_PRE_FOCUS);
+        focusBeep = (CheckBoxPreference) preferenceScreen.findPreference(KEY_FOCUS_BEEP);
 
         checkBoxes();
 
@@ -66,6 +69,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
             volZoom.setOnPreferenceChangeListener(this);
             longFocus.setOnPreferenceChangeListener(this);
             preFocus.setOnPreferenceChangeListener(this);
+            focusBeep.setOnPreferenceChangeListener(this);
         } else {
             volUpShutter.setOnPreferenceChangeListener(null);
             volDownShutter.setOnPreferenceChangeListener(null);
@@ -73,6 +77,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
             volZoom.setOnPreferenceChangeListener(null);
             longFocus.setOnPreferenceChangeListener(null);
             preFocus.setOnPreferenceChangeListener(null);
+            focusBeep.setOnPreferenceChangeListener(null);
         }
     }
 
