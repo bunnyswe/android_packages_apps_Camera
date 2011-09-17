@@ -226,5 +226,7 @@
     <string name="pref_camera_other_settings_title">Autres paramètres</string>
     <string name="pref_camera_timer_duration">Durée retardateur</string>
     <string name="pref_camera_timer_duration_summary">Durée utilisée pour retarder la prise de vue des photos</string>
+    <string name="pref_camera_focus_beep_mute">Le \'bip\' du focus muet</string>
+    <string name="pref_camera_focus_beep_mute_summary">Rendre muet le son \'bip\' du focus</string>
 
 </resources>
