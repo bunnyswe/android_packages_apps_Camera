@@ -114,7 +114,7 @@
     <string name="pref_camera_focusmode_entry_touch">Tactile</string>
     <string name="pref_camera_focusmode_entry_fixed">Fixe</string>
     <string name="pref_camera_focusmode_entry_facedetect">Detec.visage</string>
-    <string name="touch_focus_enabled">Touchez l'écran pour la mise au point</string>
+    <string name="touch_focus_enabled">Touchez l\'écran pour la mise au point</string>
     <string name="pref_camera_capturemode_title">Prise de vue</string>
     <string name="pref_camera_capturemode_entry_default">Immédiate</string>
     <string name="pref_camera_capturemode_entry_timer">Retardateur</string>
