@@ -101,7 +101,7 @@ public class PreviewFrameLayout extends ViewGroup {
 
         int hSpace = ((r - l) - frameWidth);
         int vSpace = ((b - t) - frameHeight) / 2;
-        Rect rect = new Rect(l , t + vSpace, r - hSpace, b - vSpace);
+        Rect rect = new Rect(l, t + vSpace, r - hSpace, b - vSpace);
 
         mFrame.measure(
                 MeasureSpec.makeMeasureSpec(frameWidth, MeasureSpec.EXACTLY),

@@ -65,6 +65,7 @@ public class CameraSettings {
 
     private static final String VIDEO_QUALITY_WIDE = "wide";
     private static final String VIDEO_QUALITY_HD = "hd";
+    private static final String VIDEO_QUALITY_WIDE = "wide";
     private static final String VIDEO_QUALITY_HIGH = "high";
     private static final String VIDEO_QUALITY_MMS = "mms";
     private static final String VIDEO_QUALITY_YOUTUBE_HD = "youtubehd";
@@ -197,6 +198,15 @@ public class CameraSettings {
                 for (CharSequence value : values) {
                     if (!VIDEO_QUALITY_HD.equals(value) &&
                             !VIDEO_QUALITY_YOUTUBE_HD.equals(value)) {
+                        supported.add(value.toString());
+                    }
+                }
+                filterUnsupportedOptions(group, videoQuality, supported);
+            }
+            if (!mContext.getResources().getBoolean(R.bool.supportsWideProfile)) {
+                List<String> supported = new ArrayList<String>();
+                for (CharSequence value : values) {
+                    if (!VIDEO_QUALITY_WIDE.equals(value)) {
                         supported.add(value.toString());
                     }
                 }

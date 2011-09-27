@@ -19,16 +19,19 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
     <FrameLayout android:id="@+id/framegl"
-            android:layout_width="740px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <FrameLayout android:id="@+id/frameright"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="left"/>
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="right">
     <RelativeLayout android:id="@+id/control_bar"
             android:orientation="vertical"
             android:layout_height="match_parent"
-            android:layout_width="76dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginBottom="10dp"
-            android:layout_alignParentRight="true">
+            android:layout_width="76dp">
         <com.android.camera.RotateImageView
                 android:id="@+id/review_thumbnail"
                 android:layout_alignParentTop="true"
@@ -73,5 +76,7 @@
                 android:src="@drawable/btn_ic_camera_shutter"
                 android:background="@drawable/btn_shutter"/>
     </RelativeLayout>
+    </FrameLayout>
+    </FrameLayout>
 </LinearLayout>
 
