@@ -19,7 +19,6 @@
     <!-- Camera Preferences Video Quality entries -->
     <string-array name="pref_video_quality_entries" translatable="false">
         <item>@string/pref_video_quality_entry_hd</item>
-        <item>@string/pref_video_quality_entry_wide</item>
         <item>@string/pref_video_quality_entry_high</item>
         <item>@string/pref_video_quality_entry_wide</item>
         <item>@string/pref_video_quality_entry_low</item>
@@ -30,7 +29,6 @@
 
     <string-array name="pref_video_quality_entryvalues" translatable="false">
         <item>hd</item>
-        <item>wide</item>
         <item>high</item>
         <item>wide</item>
         <item>low</item>
@@ -41,7 +39,6 @@
 
     <array name="video_quality_icons" translatable="false">
         <item>@drawable/ic_viewfinder_video_quality_hd</item>
-        <item>@drawable/ic_viewfinder_video_quality_wide</item>
         <item>@drawable/ic_viewfinder_video_quality_high</item>
         <item>@drawable/ic_viewfinder_video_quality_wide</item>
         <item>@drawable/ic_viewfinder_video_quality_low</item>
