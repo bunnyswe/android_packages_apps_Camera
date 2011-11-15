@@ -97,6 +97,7 @@ public class VideoCamera extends BaseCamera
     private static final int CLEAR_SCREEN_DELAY = 4;
     private static final int UPDATE_RECORD_TIME = 5;
     private static final int ENABLE_SHUTTER_BUTTON = 6;
+    private static final int DELAYED_ONRESUME_FUNCTION = 7;
 
     private static final int SCREEN_DELAY = 1000;
 
@@ -209,6 +210,10 @@ public class VideoCamera extends BaseCamera
         public void handleMessage(Message msg) {
             switch (msg.what) {
 
+                case DELAYED_ONRESUME_FUNCTION: {
+                    delayedOnResume();
+                    break;
+                }
                 case ENABLE_SHUTTER_BUTTON:
                     mShutterButton.setEnabled(true);
                     break;
@@ -694,6 +699,14 @@ public class VideoCamera extends BaseCamera
         }
         keepScreenOnAwhile();
 
+        /* Postpone the non-critical functionality till after the
+         * activity is displayed, so that the camera frames are
+         * displayed sooner on the screen.*/
+        mHandler.sendEmptyMessageDelayed(DELAYED_ONRESUME_FUNCTION, 200);
+    }
+
+    private void delayedOnResume() {
+
         // install an intent filter to receive SD card related events.
         IntentFilter intentFilter =
                 new IntentFilter(Intent.ACTION_MEDIA_MOUNTED);
@@ -755,6 +768,8 @@ public class VideoCamera extends BaseCamera
             closeCamera();
             throw new RuntimeException("startPreview failed", ex);
         }
+
+        mCameraDevice.autoFocus(null);
     }
 
     private void closeCamera() {
@@ -1319,6 +1334,7 @@ public class VideoCamera extends BaseCamera
             return;
         }
 
+        mCameraDevice.autoFocus(null);
         CameraSettings.setContinuousAf(mParameters, true);
         setCameraHardwareParameters();
 
