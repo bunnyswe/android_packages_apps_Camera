@@ -27,6 +27,7 @@
         <!-- Autofocus parameters -->
         <string name="touchFocusParameter"></string>
         <bool name="touchFocusNeedsRect">false</bool>
+        <bool name="enableTouchAEC">false</bool>
 
 	<!-- FFC parameter filtering -->
 	<bool name="ffc_canFocus">true</bool>
