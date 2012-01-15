@@ -768,6 +768,10 @@ public class VideoCamera extends BaseCamera
             closeCamera();
             throw new RuntimeException("startPreview failed", ex);
         }
+
+        if (CameraSettings.isCamcoderFocusAtStart()) {
+            mCameraDevice.autoFocus(null);
+        }
     }
 
     private void closeCamera() {
@@ -1007,13 +1011,13 @@ public class VideoCamera extends BaseCamera
      *
      * @return number of bytes available, or an ERROR code.
      */
-    private static long getAvailableStorage() {
+    private long getAvailableStorage() {
         try {
             if (!ImageManager.hasStorage()) {
                 return NO_STORAGE_ERROR;
             } else {
                 String storageDirectory =
-                        Environment.getExternalStorageDirectory().toString();
+                        ImageManager.getStorageDirectory();
                 StatFs stat = new StatFs(storageDirectory);
                 return (long) stat.getAvailableBlocks()
                         * (long) stat.getBlockSize();
@@ -1165,7 +1169,7 @@ public class VideoCamera extends BaseCamera
         String title = createName(dateTaken);
         String filename = title + 
             (MediaRecorder.OutputFormat.MPEG_4 == mProfile.fileFormat ? ".m4v" : ".3gp"); // Used when emailing.
-        String cameraDirPath = ImageManager.CAMERA_IMAGE_BUCKET_NAME;
+        String cameraDirPath = ImageManager.getCameraImageDirectory();
         String filePath = cameraDirPath + "/" + filename;
         File cameraDir = new File(cameraDirPath);
         cameraDir.mkdirs();
@@ -1342,6 +1346,9 @@ public class VideoCamera extends BaseCamera
             return;
         }
 
+        if (CameraSettings.isCamcoderFocusAtStart()) {
+            mCameraDevice.autoFocus(null);
+        }
         CameraSettings.setContinuousAf(mParameters, true);
         setCameraHardwareParameters();
 
@@ -1540,7 +1547,7 @@ public class VideoCamera extends BaseCamera
                         dataLocation(),
                         ImageManager.INCLUDE_VIDEOS,
                         ImageManager.SORT_ASCENDING,
-                        ImageManager.CAMERA_IMAGE_BUCKET_ID);
+                        ImageManager.getCameraImageBucketId());
         int count = list.getCount();
         if (count > 0) {
             IImage image = list.getImageAt(count - 1);
