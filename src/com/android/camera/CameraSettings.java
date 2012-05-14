@@ -75,6 +75,9 @@ public class CameraSettings {
     private final CameraInfo[] mCameraInfo;
     private final int mCameraId;
 
+    // For setting video size before recording starts
+    private static boolean mEarlyVideoSize;
+
     // Samsung camcorder mode
     private static boolean mSamsungCamMode;
     private static boolean mSamsungCamSettings;
@@ -86,6 +89,7 @@ public class CameraSettings {
         mCameraId = cameraId;
         mCameraInfo = cameraInfo;
 
+        mEarlyVideoSize = mContext.getResources().getBoolean(R.bool.needsEarlyVideoSize);
         mSamsungCamMode = mContext.getResources().getBoolean(R.bool.needsSamsungCamMode);
         mSamsungCamSettings = mContext.getResources().getBoolean(R.bool.hasSamsungCamSettings);
     }
@@ -271,6 +275,7 @@ public class CameraSettings {
         }
         storage.setEntries(entries);
         storage.setEntryValues(entryValues);
+        storage.setDefaultValue(entryValues[0]); // Primary storage
 
         // Filter saved invalid value
         if (storage.findIndexOfValue(storage.getValue()) < 0) {
@@ -529,6 +534,18 @@ public class CameraSettings {
     public static void setVideoMode(Parameters params, boolean on) {
         if (mSamsungCamMode) {
             params.set("cam_mode", on ? "1" : "0");
+        }
+    }
+
+    /**
+     * Set video size for certain cameras.
+     *
+     * @param params
+     * @param profile
+     */
+    public static void setEarlyVideoSize(Parameters params, CamcorderProfile profile) {
+        if (mEarlyVideoSize) {
+            params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
         }
     }
 
