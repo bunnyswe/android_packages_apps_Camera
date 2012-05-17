@@ -426,8 +426,15 @@ public class PanoramaActivity extends ActivityBase implements
             parameters.setPreviewFpsRange(minFps, maxFps);
             Log.v(TAG, "preview fps: " + minFps + ", " + maxFps);
         } else {
-            // Use the default FPS range and log an error message
-            Log.e(TAG, "Could not get/set preview FPS range! Using default.");
+            List<Integer> previewFrameRates = parameters.getSupportedPreviewFrameRates();
+            if (previewFrameRates != null) {
+                int prevFps = previewFrameRates.get(0);
+                parameters.setPreviewFrameRate(prevFps);
+                Log.v(TAG, "preview fps: " + prevFps);
+            } else {
+                // Use the default FPS range and log an error message
+                Log.e(TAG, "Could not get/set preview FPS range! Using default.");
+            }
         }
 
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
