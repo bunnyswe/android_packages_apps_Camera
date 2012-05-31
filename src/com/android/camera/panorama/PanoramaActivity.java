@@ -78,6 +78,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Activity to handle panorama capturing.
@@ -428,7 +429,7 @@ public class PanoramaActivity extends ActivityBase implements
         } else {
             List<Integer> previewFrameRates = parameters.getSupportedPreviewFrameRates();
             if (previewFrameRates != null) {
-                int prevFps = previewFrameRates.get(0);
+                int prevFps = Collections.min(previewFrameRates);
                 parameters.setPreviewFrameRate(prevFps);
                 Log.v(TAG, "preview fps: " + prevFps);
             } else {
