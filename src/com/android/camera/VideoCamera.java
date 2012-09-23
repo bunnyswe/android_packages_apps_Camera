@@ -1039,7 +1039,7 @@ public class VideoCamera extends ActivityBase
                 break;
 
             case KeyEvent.KEYCODE_VOLUME_UP:
-                if (event.getRepeatCount() == 0 && mParameters.isZoomSupported()
+                if (mParameters.isZoomSupported()
                         && mZoomControl != null && mZoomControl.isEnabled()) {
                     int index = mZoomValue + 1;
                     if (index <= mZoomMax) {
@@ -1049,7 +1049,7 @@ public class VideoCamera extends ActivityBase
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (event.getRepeatCount() == 0 && mParameters.isZoomSupported()
+                if (mParameters.isZoomSupported()
                         && mZoomControl != null && mZoomControl.isEnabled()) {
                     int index = mZoomValue - 1;
                     if (index >= 0) {
@@ -1895,9 +1895,11 @@ public class VideoCamera extends ActivityBase
             mParameters.setZoom(mZoomValue);
         }
 
-        // Set continuous autofocus.
+        // Set focus mode.
         List<String> supportedFocus = mParameters.getSupportedFocusModes();
-        if (isSupported(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO, supportedFocus)) {
+        if (mCaptureTimeLapse && isSupported(Parameters.FOCUS_MODE_AUTO, supportedFocus)) {
+            mParameters.setFocusMode(Parameters.FOCUS_MODE_AUTO);
+        } else if (isSupported(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO, supportedFocus)) {
             mParameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         }
 
