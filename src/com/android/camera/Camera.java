@@ -280,6 +280,10 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
     private TextView mRecordingTimeView;
     private RotateLayout mRecordingTimeRect;
 
+    // Burst mode
+    private int mBurstShotsDone = 0;
+    private boolean mBurstShotInProgress = false;
+
     // multiple cameras support
     private int mNumberOfCameras;
     private int mCameraId;
@@ -632,6 +636,10 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
                 (CameraHolder.instance().getCameraInfo()[mCameraId].facing == CameraInfo.CAMERA_FACING_FRONT)) {
             return;
         }
+        if (Util.noFaceDetectOnRearCamera() &&
+                (CameraHolder.instance().getCameraInfo()[mCameraId].facing == CameraInfo.CAMERA_FACING_BACK)) {
+            return;
+        }
         if (mFaceDetectionStarted || mCameraState != IDLE) return;
         if (mParameters.getMaxNumDetectedFaces() > 0) {
             mFaceDetectionStarted = true;
@@ -933,6 +941,10 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
             Log.v(TAG, "mJpegCallbackFinishTime = "
                     + mJpegCallbackFinishTime + "ms");
             mJpegPictureCallbackTime = 0;
+
+            if (mSnapshotOnIdle && mBurstShotsDone > 0) {
+                mHandler.post(mDoSnapRunnable);
+            }
         }
     }
 
@@ -1203,7 +1215,9 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
 
     @Override
     public void playSound(int soundId) {
-        mCameraSound.playSound(soundId);
+        if(focusSound(mPreferences)) {
+            mCameraSound.playSound(soundId);
+        }
     }
 
     private boolean saveDataToFile(String filePath, byte[] data) {
@@ -1396,10 +1410,13 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
         final String[] OTHER_SETTING_KEYS = {
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_POWER_SHUTTER,
+                CameraSettings.KEY_FOCUS_SOUND,
                 CameraSettings.KEY_STORAGE,
                 CameraSettings.KEY_PICTURE_SIZE,
                 CameraSettings.KEY_FOCUS_MODE,
-                CameraSettings.KEY_TIMER_MODE};
+                CameraSettings.KEY_ISO,
+                CameraSettings.KEY_TIMER_MODE,
+                CameraSettings.KEY_BURST_MODE};
 
         CameraPicker.setImageResourceId(R.drawable.ic_switch_photo_facing_holo_light);
         mIndicatorControlContainer.initialize(this, mPreferenceGroup,
@@ -1626,6 +1643,7 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
 
     @Override
     public void onShutterButtonClick() {
+        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));
         if (!mTimerMode) {
             if (mCaptureMode != 0) {
                 mTimerMode = true;
@@ -1646,7 +1664,9 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
             return;
         }
 
-        if (mPausing || collapseCameraControls()) return;
+        if (mPausing || collapseCameraControls()) {
+            return;
+        }
 
         // Do not take the picture if there is not enough storage.
         if (mPicturesRemaining <= 0) {
@@ -1666,13 +1686,22 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
             return;
         }
 
-        mSnapshotOnIdle = false;
         if (mSnapshotMode == CameraInfo.CAMERA_SUPPORT_MODE_ZSL) {
             mFocusManager.setZslEnable(true);
         } else {
             mFocusManager.setZslEnable(false);
         }
+
         mFocusManager.doSnap();
+        mBurstShotsDone++;
+
+        if (mBurstShotsDone == nbBurstShots) {
+            mBurstShotsDone = 0;
+            mSnapshotOnIdle = false;
+        } else if (mSnapshotOnIdle == false) {
+            // queue a new shot until we done all our shots
+            mSnapshotOnIdle = true;
+        }
     }
 
     private OnScreenHint mStorageHint;
@@ -2059,7 +2088,11 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
 
         // If we're previewing already, stop the preview first (this will blank
         // the screen).
-        if (mCameraState != PREVIEW_STOPPED) stopPreview();
+        if (mCameraState != PREVIEW_STOPPED &&
+             (!getResources().getBoolean(R.bool.previewStopsDuringSnapshot) || 
+               mCameraState != SNAPSHOT_IN_PROGRESS) 
+           ) 
+            stopPreview();
 
         setPreviewDisplay(mSurfaceHolder);
         setDisplayOrientation();
@@ -2094,8 +2127,7 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
         mFocusManager.onPreviewStarted();
         mCameraDevice.setParameters(mParameters);
 
-        if (mSnapshotOnIdle) {
-            mSnapshotOnIdle = false;
+        if (mSnapshotOnIdle && mBurstShotsDone > 0) {
             mHandler.post(mDoSnapRunnable);
         }
     }
@@ -2249,6 +2281,13 @@ public class Camera extends ActivityBase implements FocusManager.Listener,
 
         // For the following settings, we need to check if the settings are
         // still supported by latest driver, if not, ignore the settings.
+
+        // Set ISO speed.
+        String iso = mPreferences.getString(
+                CameraSettings.KEY_ISO,
+                getString(R.string.pref_camera_iso_default));
+        if (isSupported(iso, mParameters.getSupportedIsoValues()))
+                 mParameters.setISOValue(iso);
 
         // Set exposure compensation
         int value = CameraSettings.readExposure(mPreferences);

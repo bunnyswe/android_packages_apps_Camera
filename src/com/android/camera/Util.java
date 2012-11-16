@@ -92,13 +92,17 @@ public class Util {
     // Samsung camcorder mode
     private static boolean sSamsungCamMode;
     private static boolean sSamsungCamSettings;
+    
+    // HTC camcorder mode
+    private static boolean sHTCCamMode;
 
     // Samsung ZSL mode
     private static boolean sEnableZSL;
 
     // Workaround for QC cameras with broken face detection on front camera
     private static boolean sNoFaceDetectOnFrontCamera;
-
+    private static boolean sNoFaceDetectOnRearCamera;
+    
     private Util() {
     }
 
@@ -117,12 +121,18 @@ public class Util {
         sEarlyVideoSize = context.getResources().getBoolean(R.bool.needsEarlyVideoSize);
         sSamsungCamMode = context.getResources().getBoolean(R.bool.needsSamsungCamMode);
         sSamsungCamSettings = context.getResources().getBoolean(R.bool.hasSamsungCamSettings);
+        sHTCCamMode = context.getResources().getBoolean(R.bool.needsHTCCamMode);
         sEnableZSL = context.getResources().getBoolean(R.bool.enableZSL);
         sNoFaceDetectOnFrontCamera = context.getResources().getBoolean(R.bool.noFaceDetectOnFrontCamera);
+        sNoFaceDetectOnRearCamera = context.getResources().getBoolean(R.bool.noFaceDetectOnRearCamera);
     }
 
     public static boolean needsEarlyVideoSize() {
         return sEarlyVideoSize;
+    }
+
+    public static boolean useHTCCamMode() {
+        return sHTCCamMode;
     }
 
     public static boolean useSamsungCamMode() {
@@ -139,6 +149,10 @@ public class Util {
 
     public static boolean noFaceDetectOnFrontCamera() {
         return sNoFaceDetectOnFrontCamera;
+    }
+    
+    public static boolean noFaceDetectOnRearCamera() {
+        return sNoFaceDetectOnRearCamera;
     }
 
     public static boolean isTabletUI() {

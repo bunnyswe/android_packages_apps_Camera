@@ -60,6 +60,12 @@
             camera:entries="@array/pref_switch_entries"
             camera:entryValues="@array/pref_switch_entryvalues" />
     <ListPreference
+            camera:key="pref_focus_sound"
+            camera:defaultValue="@string/pref_camera_focus_sound_default"
+            camera:title="@string/pref_camera_focus_sound_title"
+            camera:entries="@array/pref_switch_entries"
+            camera:entryValues="@array/pref_switch_entryvalues" />
+    <ListPreference
             camera:key="pref_camera_storage_key"
             camera:title="@string/pref_camera_storage_title" />
     <ListPreference
@@ -74,11 +80,23 @@
             camera:entries="@array/pref_camera_timer_duration_entries"
             camera:entryValues="@array/pref_camera_timer_duration_values" />
     <ListPreference
+            camera:key="pref_camera_burst_key"
+            camera:defaultValue="@string/pref_camera_burst_default"
+            camera:title="@string/pref_camera_burst_title"
+            camera:entries="@array/pref_camera_burst_mode_entries"
+            camera:entryValues="@array/pref_camera_burst_mode_values" />
+    <ListPreference
             camera:key="pref_camera_focusmode_key"
             camera:defaultValue="@array/pref_camera_focusmode_default_array"
             camera:title="@string/pref_camera_focusmode_title"
             camera:entries="@array/pref_camera_focusmode_entries"
             camera:entryValues="@array/pref_camera_focusmode_entryvalues" />
+    <ListPreference
+            camera:key="pref_camera_iso_key"
+            camera:defaultValue="@string/pref_camera_iso_default"
+            camera:title="@string/pref_camera_iso_title"
+            camera:entries="@array/pref_camera_iso_entries"
+            camera:entryValues="@array/pref_camera_iso_entryvalues" />
     <IconListPreference
             camera:key="pref_camera_id_key"
             camera:defaultValue="@string/pref_camera_id_default"
